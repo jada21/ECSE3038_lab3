@@ -64,8 +64,10 @@ async def create_data(request: Request):
 #patch data
 @app.patch("/data/{id}")
 async def update_data(id: str, request: Request):
-    updated_data = await db["Waterdata"].update_one({"_id": ObjectId(id)}, {"$set": request})
-    return updated_data
+    info = await request.json()         #the new information
+    updated_data = await db["Waterdata"].update_one({"_id": ObjectId(id)}, {"$set": info})
+    result = await db["Waterdata"].find_one({"_id":id})
+    return result
 
 #delete data
 @app.delete("/data/{id}", status_code= 204)        
