@@ -25,7 +25,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-#pretending to write code here, as a movie star. npoll my name oo 
 
 client = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://jadasdata:Nilaja2002@cluster0.hj6aecx.mongodb.net/?retryWrites=true&w=majority")
 db = client.Lab3
