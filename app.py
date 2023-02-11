@@ -40,6 +40,7 @@ async def get_profile():
 @app.post("/profile", status_code=201)
 async def create_profile(request: Request):
     profile_object = await request.json()
+    #profile_object["last_updated"]=datetime.now()
 
     new_profile = await db["Data"].insert_one(profile_object)
     created_profile = await db["Data"].find_one({"_id": new_profile.inserted_id})
@@ -63,7 +64,6 @@ async def create_data(request: Request):
 #patch data
 @app.patch("/data/{id}")
 async def update_data(id: str, request: Request):
-    changed_data = await db["Waterdata"].find_one({"_id": ObjectId(id)}) 
     updated_data = await db["Waterdata"].update_one({"_id": ObjectId(id)}, {"$set": request})
     return updated_data
 
