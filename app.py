@@ -1,5 +1,6 @@
 #Jada Campbell 620141014
 
+from datetime import datetime
 import os
 from fastapi import FastAPI, Body, Request, HTTPException, status
 from fastapi.responses import Response, JSONResponse
@@ -40,10 +41,11 @@ async def get_profile():
 @app.post("/profile", status_code=201)
 async def create_profile(request: Request):
     profile_object = await request.json()
-    #profile_object["last_updated"]=datetime.now()
+    profile_object["last_updated"]=datetime.now()
 
     new_profile = await db["Data"].insert_one(profile_object)
     created_profile = await db["Data"].find_one({"_id": new_profile.inserted_id})
+    #created_profile["last_updated"]=datetime.now()
     return created_profile
 
 #get data
