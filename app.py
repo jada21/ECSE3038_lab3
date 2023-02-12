@@ -45,17 +45,16 @@ async def create_profile(request: Request):
 
     new_profile = await db["Data"].insert_one(profile_object)
     created_profile = await db["Data"].find_one({"_id": new_profile.inserted_id})
-    #created_profile["last_updated"]=datetime.now()
     return created_profile
 
 #get data
-@app.get("/data", status_code=201)
+@app.get("/data")
 async def get_all_data():
     datas = await db["Waterdata"].find().to_list(999)
     return datas
 
 #post data
-@app.post("/data")
+@app.post("/data", status_code=201)
 async def create_data(request: Request):
     data_object = await request.json()
 
@@ -72,7 +71,9 @@ async def update_data(id: str, request: Request):
     return result
 
 #delete data
-@app.delete("/data/{id}", status_code= 204)        
+@app.delete("/data/{id}", status_code=204)        
 async def delete_data(id: str):
-    to_delete = await db["Waterdata"].find_one_and_delete({"_id": ObjectId(id)}) 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    to_delete =  await db["Waterdata"].find_one_and_delete({"_id": ObjectId(id)}) 
+
+    if not to_delete:
+        raise HTTPException(status_code=404, detail= "Not Found")
